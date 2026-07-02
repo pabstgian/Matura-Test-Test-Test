@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Markt-Simulation</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <div id="adminGate" class="admin-gate">Zugriff wird geprüft …</div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="admin-header">
+        <h1>Admin · Datenübersicht</h1>
+        <button id="refreshBtn" class="btn btn-secondary">Aktualisieren</button>
+      </div>
+
+      <div class="admin-notice">
+        <strong>Wichtig:</strong> localStorage ist an dieses Gerät/diesen Browser gebunden.
+        Diese Seite zeigt daher nur lokal auf <em>diesem</em> Gerät gespeicherte Daten (z. B.
+        eigene Testdurchläufe) &ndash; nicht automatisch die Daten aller Teilnehmenden. Die
+        vollständige Datensammlung über alle Teilnehmenden hinweg läuft über die
+        Web3Forms-E-Mails (siehe README.md). Export und Löschen hier betreffen ausschließlich
+        dieses Gerät.
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-label">Teilnehmer-ID (dieses Gerät)</span>
+          <span class="stat-value" id="statParticipant">–</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Demografie</span>
+          <span class="stat-value" id="statDemo">–</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Fortschritt</span>
+          <span class="stat-value" id="statProgress">–</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Portfolio-Stand</span>
+          <span class="stat-value" id="statPortfolio">–</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Gespeicherte Datensätze</span>
+          <span class="stat-value" id="statRecordCount">–</span>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button id="exportCsvBtn" class="btn btn-primary">CSV exportieren</button>
+        <button id="exportJsonBtn" class="btn btn-secondary">JSON exportieren</button>
+        <button id="deleteAllBtn" class="btn danger-btn">Alle Daten löschen</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Szenario</th>
+              <th>Titel</th>
+              <th>Kurs</th>
+              <th>Aktion</th>
+              <th>Stückzahl</th>
+              <th>Portfolio</th>
+              <th>Reaktionszeit</th>
+              <th>Timer abgelaufen</th>
+            </tr>
+          </thead>
+          <tbody id="recordsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/scenarios.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
