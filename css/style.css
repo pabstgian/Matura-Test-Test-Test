@@ -349,8 +349,25 @@ p {
 
 /* ---------------------------- Intro / Demografie / Status ---------------------------- */
 
+.status-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.depot-card .price-top {
+  margin-bottom: 4px;
+}
+
+.depot-recap {
+  margin-top: 16px;
+}
+
 .intro-card,
-.status-card {
+.status-card,
+.depot-card {
   max-width: 560px;
   width: 100%;
 }

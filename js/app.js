@@ -268,15 +268,55 @@
   function renderLockedScreen() {
     const progress = S.getProgress();
     const portfolio = S.getPortfolio();
+
+    const totalValue = round2(portfolio.cash + portfolio.shares * portfolio.price);
+    const positionValue = round2(portfolio.shares * portfolio.price);
+    const renditePercent = ((totalValue - S.STARTING_CASH) / S.STARTING_CASH) * 100;
+    const isUp = renditePercent >= 0;
+
+    const history = portfolio.priceHistory || [];
+    let priceChangeHTML = "";
+    if (history.length >= 2) {
+      const prevPrice = history[history.length - 2];
+      const deltaPercent = ((portfolio.price - prevPrice) / prevPrice) * 100;
+      const deltaUp = deltaPercent >= 0;
+      priceChangeHTML = `
+        <div class="price-change ${deltaUp ? "text-up" : "text-down"}">
+          ${formatSignedPercent(deltaPercent)} seit gestern
+        </div>`;
+    }
+
     root.innerHTML = `
       ${headerHTML(progress.nextScenarioIndex, portfolio)}
       <div class="centered-screen">
-        <div class="card status-card">
-          <div class="status-icon">⏳</div>
-          <h1>Bis morgen!</h1>
-          <p>Du hast das heutige Szenario bereits abgeschlossen.<br />
-            Das nächste Szenario wird morgen freigeschaltet.</p>
-          <p class="fine-print">Fortschritt: ${progress.nextScenarioIndex} von ${TOTAL_SCENARIOS} Szenarien abgeschlossen.</p>
+        <div class="status-stack">
+          <div class="card status-card">
+            <div class="status-icon">⏳</div>
+            <h1>Bis morgen!</h1>
+            <p>Du hast das heutige Szenario bereits abgeschlossen.<br />
+              Das nächste Szenario wird morgen freigeschaltet.</p>
+            <p class="fine-print">Fortschritt: ${progress.nextScenarioIndex} von ${TOTAL_SCENARIOS} Szenarien abgeschlossen.</p>
+          </div>
+
+          <div class="card depot-card">
+            <div class="price-top">
+              <div>
+                <div class="price-label">Aktueller Aktienkurs</div>
+                <div class="price-value">${formatCurrency(portfolio.price)}</div>
+              </div>
+              ${priceChangeHTML}
+            </div>
+            ${buildSparkline(history)}
+
+            <div class="decision-recap depot-recap">
+              <div><span>Cash</span><strong>${formatCurrency(portfolio.cash)}</strong></div>
+              <div><span>Aktien im Depot</span><strong>${portfolio.shares} Stück · ${formatCurrency(positionValue)}</strong></div>
+              <div><span>Gesamtwert</span><strong>${formatCurrency(totalValue)}</strong></div>
+              <div><span>Rendite seit Start</span><strong class="${isUp ? "text-up" : "text-down"}">${formatSignedPercent(renditePercent)}</strong></div>
+            </div>
+            <p class="fine-print">Dein Depot bewegt sich weiter mit dem Kurs, auch während du auf das nächste
+              Szenario wartest &ndash; du kannst nur heute nicht mehr handeln.</p>
+          </div>
         </div>
       </div>
     `;
